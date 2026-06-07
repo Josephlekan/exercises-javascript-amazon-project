@@ -1,4 +1,6 @@
-import {calcualteCartQty, cart, removeCart, updateQuantity} from "../data/cart.js";
+import {calcualteCartQty, cart, removeCart, updateQuantity,
+  updateDeliveryOption
+} from "../data/cart.js";
 import {products} from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
@@ -92,22 +94,24 @@ import {deliveryOption} from "../data/deliveryOptions.js"
   function deliveryOptionsHTML(matchingProducts, cartItem){
 
       let html = '';
-      deliveryOption.forEach((deliveryOption) => {
+      deliveryOption.forEach((deliveryOptionss) => {
         const today = dayjs();
         const deliveryDate = today.add(
-          deliveryOption.deliveryDays, 
+          deliveryOptionss.deliveryDays, 
           'days'
         );
         const dateString = deliveryDate.format('dddd, MMMM D');
-        const deliveryPrice = deliveryOption.priceCent === 0
+        const deliveryPrice = deliveryOptionss.priceCent === 0
         ? 'Free -'
-        : `$${formatCurrency(deliveryOption.priceCent)} -`
+        : `$${formatCurrency(deliveryOptionss.priceCent)} -`
 
-        const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
+        const isChecked = deliveryOptionss.id === cartItem.deliveryOptionId;
 
       html += 
                 `
-                  <div class="delivery-option">
+                  <div class="delivery-option js-delivery-option"
+                    data-product-id = "${matchingProducts.id}"
+                    data-delivery-option-id = "${deliveryOptionss.id}">
                             <input type="radio"
                               ${(isChecked ? 'checked' : '')}
                               class="delivery-option-input"
@@ -187,3 +191,11 @@ import {deliveryOption} from "../data/deliveryOptions.js"
       function saveToStorage(){
         localStorage.setItem('newCartQuantity', JSON.stringify(newCartQuantity));
       }
+
+      document.querySelectorAll('.js-delivery-option')
+          .forEach((element) => {
+            element.addEventListener('click', () => {
+            const {productId, deliveryOptionId} = element.dataset;
+            updateDeliveryOption(productId, deliveryOptionId);
+          });
+        });
