@@ -1,7 +1,7 @@
 import {calcualteCartQty, cart, removeCart, updateQuantity,
   updateDeliveryOption
 } from "../../data/cart.js";
-import {products} from "../../data/products.js";
+import {products, getProduct} from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import {deliveryOption} from "../../data/deliveryOptions.js"
@@ -18,12 +18,8 @@ import {deliveryOption} from "../../data/deliveryOptions.js"
 
       cart.forEach((cartItem) => {
         const productId = cartItem.productId;
-        let matchingProducts;
-        products.forEach((product) => {
-          if(product.id === productId){
-            matchingProducts = product;
-          }
-        });
+        const matchingProducts = getProduct(productId);
+        
 
         const deliveryOptionId = cartItem.deliveryOptionId;
         let deliveryOptions;
