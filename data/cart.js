@@ -74,11 +74,12 @@ export function addToCart(productId){
         });
     }
 
-  export  function updateQuantity(productId, newQuantity){
+  export  function updateQuantity(productId, newQuantityValue){
       cart.forEach((cartItem) => {
         if(productId === cartItem.productId){
-          cartItem.productQtyValue = newQuantity; 
+          cartItem.productQtyValue = Number(newQuantityValue); 
           console.log(cartItem.productQtyValue);
+          document.querySelector(`.js-quantity-label-${productId}`).innerHTML = Number(newQuantityValue);
         }
       });
         saveToStorage();

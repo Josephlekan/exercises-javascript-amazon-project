@@ -4,6 +4,7 @@ import { formatCurrency } from "./utils/money.js";
 import { saveToStorage } from "../data/cart.js";
 
 
+
 let productsHTML = '';
 let itemsPrice = '';
 const setTimer = {};

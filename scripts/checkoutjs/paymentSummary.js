@@ -3,6 +3,8 @@
  
  export function renderPaymentSummary(){
     cart.forEach((cartItem) => {
-       const product = getProduct(cartItem, productId)
+       const product = getProduct(cartItem.productId)
     });
  }
+
+ renderPaymentSummary();
