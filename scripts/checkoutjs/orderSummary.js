@@ -27,8 +27,6 @@ import { renderPaymentSummary } from "./paymentSummary.js";
           if(delivery.id === deliveryOptionId){
             deliveryOptions = delivery;
           }
-          
-          
         });
 
         const today = dayjs();

@@ -92,7 +92,6 @@ export function addToCart(productId){
             matchingItem = item;
           }
         });
-
         matchingItem.deliveryOptionId = deliveryOptionId;
         saveToStorage();
     }
