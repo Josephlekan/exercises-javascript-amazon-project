@@ -39,7 +39,7 @@ export function addToCart(productId){
               cart.push({
               productId,
               productQtyValue,
-              deliveryOptionId: '2'
+              deliveryOptionId: '1'
             });
             
           }
@@ -94,4 +94,8 @@ export function addToCart(productId){
         });
         matchingItem.deliveryOptionId = deliveryOptionId;
         saveToStorage();
+    }
+
+   export function fromatQty(qty){
+      return (qty.toLocaleString('en-US'));
     }

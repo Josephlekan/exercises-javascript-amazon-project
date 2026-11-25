@@ -670,7 +670,7 @@ export const products = [
   {
     id: "aabwj-5323-403f-b7cf-73edjie9ei0005",
     image: "images/products/umbrella.jpg",
-    name: "Men's Full-Zip Hooded Fleece Sweatshirt",
+    name: "Umbrella",
     rating: {
       stars: 4.0,
       count: 35001

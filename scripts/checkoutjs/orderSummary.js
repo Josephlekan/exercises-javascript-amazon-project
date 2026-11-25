@@ -1,36 +1,29 @@
 import {calcualteCartQty, cart, removeCart, updateQuantity,
-  updateDeliveryOption
+  updateDeliveryOption, fromatQty,
+  saveToStorage
 } from "../../data/cart.js";
 import {products, getProduct} from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import {deliveryOption} from "../../data/deliveryOptions.js"
+import {deliveryOption, getDeliveryId} from "../../data/deliveryOptions.js"
 import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderCheckOutHeading } from "./checkOutHeading.js";
+
 
     //saveToStorage();
-  const today = (dayjs());
-  const deliveryDate = today.add(7, 'days');
-  console.log(deliveryDate.format('dddd, MMMM D'));
-
-
+   renderCheckOutHeading();
   export function renderCheckOutSummary(){
-  
+   
   let checkOutSummary = '';
 
       cart.forEach((cartItem) => {
         const productId = cartItem.productId;
         const matchingProducts = getProduct(productId);
         const deliveryOptionId = cartItem.deliveryOptionId;
-        let deliveryOptions;
+        const deliveryOptions = getDeliveryId(deliveryOptionId);
 
-        deliveryOption.forEach((delivery) =>{
-          if(delivery.id === deliveryOptionId){
-            deliveryOptions = delivery;
-          }
-        });
-
-        const today = dayjs();
-        const deliveryDate = today.add(
+         const today = dayjs();
+         const deliveryDate = today.add(
           deliveryOptions.deliveryDays, 
           'days'
         );
@@ -42,7 +35,7 @@ import { renderPaymentSummary } from "./paymentSummary.js";
       ` <div class="cart-item-container 
           js-cart-item-container-${matchingProducts.id} ">
                 <div class="delivery-date">
-                  Delivery date: ${dateString}
+                  Delivery date: ${dateString};
                 </div>
 
                 <div class="cart-item-details-grid">
@@ -102,6 +95,7 @@ import { renderPaymentSummary } from "./paymentSummary.js";
             : `$${formatCurrency(deliveryOptionss.priceCent)} -`
 
             const isChecked = deliveryOptionss.id === cartItem.deliveryOptionId;
+            
 
           html += 
                     `
@@ -131,11 +125,12 @@ import { renderPaymentSummary } from "./paymentSummary.js";
         document.querySelectorAll('.js-delete-quantity-link')
             .forEach((link) => {
               link.addEventListener('click', () => {
-                const productId = link.dataset.productId;    
-                const container =  document.querySelector(`.js-cart-item-container-${productId}`);
+                  const productId = link.dataset.productId;    
+                  const container =  document.querySelector(`.js-cart-item-container-${productId}`);
                   container.remove();
                   removeCart(productId);
-                  updateCartQty();   
+                  updateCartQty();
+                  renderPaymentSummary();   
                 }); 
             });
 
@@ -178,6 +173,7 @@ import { renderPaymentSummary } from "./paymentSummary.js";
                 }
                 updateQuantity(productId, newQuantityValue);
                 updateCartQty();
+                renderPaymentSummary();
                 });
               });
             
@@ -187,7 +183,8 @@ import { renderPaymentSummary } from "./paymentSummary.js";
             
             function updateCartQty(){
               const cartQuantity = calcualteCartQty();
-              document.querySelector('.js-cartQty').innerHTML = `${cartQuantity} items`; 
+              document.querySelector('.js-cartQty').innerHTML = `${fromatQty(cartQuantity)} items`; 
+              saveToStorage();
             }
 
           document.querySelectorAll('.js-delivery-option')
@@ -196,9 +193,9 @@ import { renderPaymentSummary } from "./paymentSummary.js";
                 const {productId, deliveryOptionId} = element.dataset;
                 updateDeliveryOption(productId, deliveryOptionId);
                 renderCheckOutSummary();
+                renderPaymentSummary();
               });
             });
           }
 
       renderCheckOutSummary();
-    

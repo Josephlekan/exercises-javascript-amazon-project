@@ -9,14 +9,7 @@ let productsHTML = '';
 let itemsPrice = '';
 const setTimer = {};
 
-/*products.forEach((product) => {
-  const productPrice = product.priceCents;
-  console.log(productPrice);
-});*/
-
 products.forEach((product) => {
-  
-  
         productsHTML += `
        <div class="product-container">
           <div class="product-image-container">
@@ -112,14 +105,27 @@ products.forEach((product) => {
                 showAddedToCartInterval(productId);
                 addToCart(productId);
                 updateCartQty();
-                products.forEach((product) => {
-                  if(productId === product.id){            
-                    console.log (`$${formatCurrency(product.priceCents)}`);
-                  }
-                });
+                getPPrice(productId);
+                
               });
             });
 
+      function getPPrice(productId){
+        let carts;
+        let productss;
+        cart.forEach((cartItem)=>{
+          if(productId === cartItem.productId){
+            carts = cartItem;
+          }
+        });
+        products.forEach((product)=> {
+          if(productId === product.id){
+            productss = product;
+          }
+        });
+        const priceGotten = `${carts.produ}` * productss.priceCents;
+        console.log(priceGotten);
+      }
         
 
 
